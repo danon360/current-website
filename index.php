@@ -1,3 +1,38 @@
+<?php
+require 'authenticate.php';
+
+
+
+if(isset($_POST['username'])&& isset($_POST['password'])){
+  $inputusername = $_POST['username'];
+  $inputpassword = $_POST['password'];
+
+  $sql = "SELECT * FROM userdata WHERE username = '$inputusername' and password = '$inputpassword'";
+  //submitting an sql query
+  $response = $connection->query($sql);
+  //$data is an associative array
+  $data =$response->fetch_assoc();
+}
+ini_set('display_errors',1);
+$ip_adress = $_SERVER['REMOTE_ADDR'];
+echo "$ip_adress";
+
+  //starting session
+  session_start();
+  //checks if session "logged_in" exists. if it does, it redirects to page home.php
+  if(isset($_SESSION['logged_in'])&&($_SESSION['logged_in']==true)){
+    header("Location: home.php");
+  }
+  //checking if the forum has been submited before
+  if(isset($_POST['username'])&& isset($_POST['password'])){
+    if($inputusername==$data['username']&&$inputpassword==$data['password']){
+      $_SESSION['logged_in']=true;
+      header("Location: home.php");
+
+    }
+  }
+
+ ?>
 <!-- <!DOCTYPE html> -->
 <html>
 <head> <title> Login 2</title>
@@ -7,7 +42,6 @@
     position:absolute;
     margin-left: 43%;
     top:18%;
-
   }
   td {
     color: #E4B272;
@@ -26,35 +60,21 @@
  input::placeholder{
    color: #ACACAC;
  }
+ button{
+   border-style: solid;
+   background-color:#5B89A4;
+   border-color:#5B89A4;
+ }
   </style>
+  <script type="text/javascript">
+function redirect(){
 
+  location.href="signUp.php";
+  return false;
+}
+  </script>
 </head>
 <body>
-
-  <?php
-  ini_set('display_errors',1);
-  $ip_adress = $_SERVER['REMOTE_ADDR'];
-  echo "$ip_adress";
-
-    $username="head";
-    $password="hunter";
-
-    //starting session
-    session_start();
-    //checks if session "logged_in" exists. if it does, it redirects to page home.php
-    /*if(isset($_SESSION['logged_in'])&&($_SESSION['logged_in']==true)){
-      header("Location: home.php");
-    }*/
-    //checking if the forum has been submited before
-    if(isset($_POST['username'])&& isset($_POST['password'])){
-      if(($username==$_POST['username'])&& ($password==$_POST['password'])){
-        $_SESSION['logged_in']=true;
-        //header("Location: home.php");
-
-      }
-    }
-
-   ?>
   <form method="post" action="index.php">
     <table id="frm">
       <tr>
@@ -75,8 +95,11 @@
       </tr>
 
       <tr>
-        <td colspan="2">
+        <td>
           <input type="submit"></input>
+        </td>
+        <td>
+          <button id="sbutton" onclick="return redirect()">Sign Up </button>
         </td>
       </tr>
 
