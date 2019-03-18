@@ -2,7 +2,6 @@
 require 'authenticate.php';
 
 
-
 if(isset($_POST['username'])&& isset($_POST['password'])){
   $inputusername = $_POST['username'];
   $inputpassword = $_POST['password'];
@@ -13,7 +12,7 @@ if(isset($_POST['username'])&& isset($_POST['password'])){
   //$data is an associative array
   $data =$response->fetch_assoc();
 }
-ini_set('display_errors',1);
+//ini_set('display_errors',1);
 $ip_adress = $_SERVER['REMOTE_ADDR'];
 echo "$ip_adress";
 
@@ -21,7 +20,7 @@ echo "$ip_adress";
   session_start();
   //checks if session "logged_in" exists. if it does, it redirects to page home.php
   if(isset($_SESSION['logged_in'])&&($_SESSION['logged_in']==true)){
-    header("Location: home.php");
+    //header("Location: home.php");
   }
   //checking if the forum has been submited before
   if(isset($_POST['username'])&& isset($_POST['password'])){
@@ -42,6 +41,13 @@ echo "$ip_adress";
     position:absolute;
     margin-left: 43%;
     top:18%;
+  }
+  #disclaimer{
+      position:absolute;
+      margin-left: 19%;
+      top:10%;
+      color: white;
+
   }
   td {
     color: #E4B272;
@@ -75,6 +81,7 @@ function redirect(){
   </script>
 </head>
 <body>
+    <span id="disclaimer">Disclaimer: Please note that user credidentials may be deleted every once in a while, therefore usernames and passwords are not permanent</span>
   <form method="post" action="index.php">
     <table id="frm">
       <tr>
